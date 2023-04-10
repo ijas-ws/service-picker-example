@@ -10,7 +10,7 @@ on:
     paths: "api-node-hapi-pg/*"
   pull_request:
     branches: ["master", "develop"]
-    paths: "api-node-hapi-pg/*"
+    paths: "api-node-hapi-pg/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

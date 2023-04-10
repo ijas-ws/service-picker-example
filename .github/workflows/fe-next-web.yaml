@@ -10,7 +10,7 @@ on:
     paths: "fe-next-web/*"
   pull_request:
     branches: ["master", "develop"]
-    paths: "fe-next-web/*"
+    paths: "fe-next-web/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
