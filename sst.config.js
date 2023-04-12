@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
+import { Api2NodeGraphqlMysql } from "./stacks/Api2NodeGraphqlMysql";
 import { FeReactJsWeb } from "./stacks/FeReactJsWeb";
 import { ApiNodeHapiPg } from "./stacks/ApiNodeHapiPg";
+import { Fe2NextJsWeb } from "./stacks/Fe2NextJsWeb";
 
 dotenv.config({ path: ".env" });
 
@@ -13,6 +15,6 @@ export default {
 	},
 	stacks(app) {
 		// deploy stacks
-		app.stack(FeReactJsWeb).stack(ApiNodeHapiPg);
+		app.stack(Api2NodeGraphqlMysql).stack(FeReactJsWeb).stack(ApiNodeHapiPg).stack(Fe2NextJsWeb);
 	},
 };

@@ -25,6 +25,31 @@ services:
       ENVIRONMENT_NAME: docker
 
 
+  # Setup MySQL
+  api_2_node_graphql_mysql_db:
+    image: 'mysql:5.7' 
+    ports:
+      - 3306:3306 
+    restart: always # This will make sure that the container comes up post unexpected shutdowns
+    env_file:
+      - ./api2-node-graphql-mysql/.env.docker
+    volumes:
+      - api2-node-graphql-mysql-db-volume:/var/lib/mysql
+
+  # Setup api2-node-graphql-mysql api
+  api2-node-graphql-mysql:
+    build:
+      context: './api2-node-graphql-mysql'
+      args:
+        ENVIRONMENT_NAME: docker
+    ports:
+      - 9001:9000
+    env_file:
+      - ./api2-node-graphql-mysql/.env.docker
+    environment:
+      ENVIRONMENT_NAME: docker
+
+
   # Setup Redis
   redis:
     image: 'redis:6-alpine'
@@ -42,6 +67,16 @@ services:
     env_file:
       - ./fe-react-js-web/.env.docker
 
+  # Setup fe2-next-js-web web
+  fe2-next-js-web:
+    build:
+      context: './fe2-next-js-web'
+    ports:
+      - 3001:3000
+    env_file:
+      - ./fe2-next-js-web/.env.docker
+
 # Setup Volumes
 volumes:
   api-node-hapi-pg-db-volume:
+  api2-node-graphql-mysql-db-volume:
