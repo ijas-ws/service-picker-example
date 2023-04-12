@@ -19,6 +19,8 @@ export function ApiNodeHapiPg({ stack }) {
 	const environment = "develop";
 	const clientPrefix = `${clientName}-${environment}`;
 	const dbName = "api_database";
+	const dbUsername = "username";
+	const awsRegion = process.env.AWS_REGION;
 
 	const vpc = new ec2.Vpc(stack, `${clientPrefix}-vpc`, {
 		maxAzs: 3,
@@ -76,9 +78,6 @@ export function ApiNodeHapiPg({ stack }) {
 		ec2.Port.tcp(5432),
 		"Permit the database to accept requests from the fargate service"
 	);
-
-	// database
-	const dbUsername = "username";
 
 	const databaseCredentialsSecret = new secretsManager.Secret(
 		stack,
@@ -236,7 +235,7 @@ export function ApiNodeHapiPg({ stack }) {
 		.secretValueFromJson("password")
 		.toString();
 
-	const DB_URI = `postgres://${username}:${password}@${database.dbInstanceEndpointAddress}/${dbName}`;
+	const dbURI = `postgres://${username}:${password}@${database.dbInstanceEndpointAddress}/${dbName}`;
 
 	const image = ecs.ContainerImage.fromAsset("api-node-hapi-pg/", {
 		exclude: ["node_modules", ".git"],
@@ -252,7 +251,7 @@ export function ApiNodeHapiPg({ stack }) {
 		environment: {
 			BUILD_NAME: "develop",
 			ENVIRONMENT_NAME: "development",
-			DB_URI,
+			DB_URI: dbURI,
 			POSTGRES_HOST: database.dbInstanceEndpointAddress,
 			REDIS_HOST: redisCache.attrRedisEndpointAddress,
 		},
@@ -286,5 +285,20 @@ export function ApiNodeHapiPg({ stack }) {
 	new CfnOutput(stack, "redis-host", {
 		exportName: "redis-host",
 		value: redisCache.attrRedisEndpointAddress,
+	});
+
+	new CfnOutput(stack, "load-balancer-dns", {
+		exportName: "load-balancer-dns",
+		value: elb.loadBalancerDnsName,
+	});
+
+	new CfnOutput(stack, "elastic-container-registry", {
+		exportName: "elastic-container-registry",
+		value: `cdk-hnb659fds-container-assets-${stack.account}-${awsRegion}`,
+	});
+
+	new CfnOutput(stack, "aws-region", {
+		exportName: "aws-region",
+		value: awsRegion,
 	});
 }
