@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_test:
+  build-and-test:
     name: Build & Test
     runs-on: ubuntu-latest
     strategy:
@@ -19,6 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - name: Install dependencies
         working-directory: ./api-node-hapi-pg
         run: yarn
