@@ -22,6 +22,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          cache-dependency-path: ./api-node-hapi-pg/package.json
+
       - name: Install dependencies
         # working-directory: ./api-node-hapi-pg
         run: yarn
