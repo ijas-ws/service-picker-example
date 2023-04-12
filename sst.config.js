@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { FeNextWeb } from "./stacks/FeNextWeb";
-import { ApiNodeHapiPg } from "./stacks/ApiNodeHapiPg";
+import { ApiNodeGraphqlMysql } from "./stacks/ApiNodeGraphqlMysql";
 
 dotenv.config({ path: ".env" });
 
@@ -13,6 +13,6 @@ export default {
 	},
 	stacks(app) {
 		// deploy stacks
-		app.stack(FeNextWeb).stack(ApiNodeHapiPg);
+		app.stack(FeNextWeb).stack(ApiNodeGraphqlMysql);
 	},
 };
