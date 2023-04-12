@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
+          cache-dependency-path: ./fe-react-js-web/package.json
 
       - name: Install dependencies
         working-directory: ./fe-react-js-web
