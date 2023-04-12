@@ -13,27 +13,27 @@ jobs:
   build_and_test:
     name: Build & Test
     runs-on: ubuntu-latest
-    defaults: 
+    defaults:
       run:
         working-directory: ./api-node-hapi-pg
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.14.x]
 
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        working-directory: ./api-node-hapi-pg
+        # working-directory: ./api-node-hapi-pg
         run: yarn
 
       - name: Lint
-        working-directory: ./api-node-hapi-pg
+        # working-directory: ./api-node-hapi-pg
         run: yarn lint
 
       - name: Build
-        working-directory: ./api-node-hapi-pg
+        # working-directory: ./api-node-hapi-pg
         run: yarn build:dev
 
       - name: Test
-        working-directory: ./api-node-hapi-pg
+        # working-directory: ./api-node-hapi-pg
         run: yarn test
