@@ -36,7 +36,7 @@ jobs:
 
       - name: Build
         working-directory: ./api02-node-graphql-pg
-        run: yarn build:dev
+        run: yarn build:development
 
       - name: Test
         working-directory: ./api02-node-graphql-pg
