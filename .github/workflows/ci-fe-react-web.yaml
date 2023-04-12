@@ -1,0 +1,46 @@
+name: CI fe-react-web
+on:
+  push:
+    branches: ["master", "develop", "qa"]
+    paths: "fe-react-web/**"
+  pull_request:
+    paths: "fe-react-web/**"
+
+  # Allows to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.14.x]
+    defaults:
+      run:
+        working-directory: ./fe-react-web
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          cache-dependency-path: ./fe-react-web/package.json
+
+      - name: Install dependencies
+        # working-directory: ./fe-react-web
+        run: yarn
+
+      - name: Lint
+        # working-directory: ./fe-react-web
+        run: yarn lint
+
+      - name: Build
+        # working-directory: ./fe-react-web
+        run: yarn build:dev
+
+      - name: Test
+        # working-directory: ./fe-react-web
+        run: yarn test
