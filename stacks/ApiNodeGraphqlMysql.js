@@ -7,14 +7,14 @@ import * as secretsManager from "aws-cdk-lib/aws-secretsmanager";
 import {
 	DatabaseInstance,
 	DatabaseInstanceEngine,
-	PostgresEngineVersion,
+	MysqlEngineVersion,
 	Credentials,
 } from "aws-cdk-lib/aws-rds";
 import { CfnOutput } from "aws-cdk-lib";
 import * as elasticcache from "aws-cdk-lib/aws-elasticache";
 import { Platform } from "aws-cdk-lib/aws-ecr-assets";
 
-export function ApiNodeHapiPg({ stack }) {
+export function ApiNodeGraphqlMysql({ stack }) {
 	const clientName = "api";
 	const environment = "develop";
 	const clientPrefix = `${clientName}-${environment}`;
@@ -73,7 +73,7 @@ export function ApiNodeHapiPg({ stack }) {
 
 	databaseSecurityGroup.addIngressRule(
 		ecsSG,
-		ec2.Port.tcp(5432),
+		ec2.Port.tcp(3306),
 		"Permit the database to accept requests from the fargate service"
 	);
 
@@ -107,8 +107,8 @@ export function ApiNodeHapiPg({ stack }) {
 			vpc,
 			securityGroups: [databaseSecurityGroup],
 			credentials: databaseCredentials,
-			engine: DatabaseInstanceEngine.postgres({
-				version: PostgresEngineVersion.VER_14_2,
+			engine: DatabaseInstanceEngine.mysql({
+				version: MysqlEngineVersion.VER_8_0_23,
 			}),
 			removalPolicy: cdk.RemovalPolicy.DESTROY, // CHANGE TO .SNAPSHOT FOR PRODUCTION
 			instanceType: ec2.InstanceType.of(
@@ -236,9 +236,9 @@ export function ApiNodeHapiPg({ stack }) {
 		.secretValueFromJson("password")
 		.toString();
 
-	const DB_URI = `postgres://${username}:${password}@${database.dbInstanceEndpointAddress}/${dbName}`;
+	const DB_URI = `mysql://${username}:${password}@${database.dbInstanceEndpointAddress}/${dbName}`;
 
-	const image = ecs.ContainerImage.fromAsset("api-node-hapi-pg/", {
+	const image = ecs.ContainerImage.fromAsset("api-node-graphql-mysql/", {
 		exclude: ["node_modules", ".git"],
 		platform: Platform.LINUX_AMD64,
 		buildArgs: {
@@ -253,7 +253,7 @@ export function ApiNodeHapiPg({ stack }) {
 			BUILD_NAME: "develop",
 			ENVIRONMENT_NAME: "development",
 			DB_URI,
-			POSTGRES_HOST: database.dbInstanceEndpointAddress,
+			MYSQL_HOST: database.dbInstanceEndpointAddress,
 			REDIS_HOST: redisCache.attrRedisEndpointAddress,
 		},
 		logging: ecs.LogDriver.awsLogs({
