@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { FeNextWeb } from "./stacks/FeNextWeb";
+import { FeReactGraphqlWeb } from "./stacks/FeReactGraphqlWeb";
 import { ApiNodeHapiPg } from "./stacks/ApiNodeHapiPg";
 
 dotenv.config({ path: ".env" });
@@ -13,6 +13,6 @@ export default {
 	},
 	stacks(app) {
 		// deploy stacks
-		app.stack(FeNextWeb).stack(ApiNodeHapiPg);
+		app.stack(FeReactGraphqlWeb).stack(ApiNodeHapiPg);
 	},
 };

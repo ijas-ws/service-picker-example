@@ -1,0 +1,53 @@
+{
+  "collectCoverageFrom": [
+    "app/**/*.{js,jsx,ts,tsx}",
+    "!app/**/*.test.{ts,tsx}",
+    "!app/*/RbGenerated*/*.{ts,tsx}",
+    "!app/app.tsx",
+    "!app/components/ScrollToTop/*.tsx",
+    "!app/components/ErrorBoundary/*.tsx",
+    "!app/global-styles.{ts}",
+    "!app/*/*/Loadable.{js,ts,tsx}",
+    "!**/loadable.tsx",
+    "!**/apiUtils.ts",
+    "!**/testUtils.tsx",
+    "!**/stories/**",
+    "!**/themes/index.ts",
+    "!app/vendor.d.ts"
+  ],
+  "testEnvironment": "jsdom",
+  "reporters": [
+    "default",
+    [
+      "jest-sonar",
+      {
+        "outputDirectory": "reports",
+        "outputName": "test-report.xml",
+        "relativeRootDir": "./",
+        "reportedFilePath": "relative"
+      }
+    ]
+  ],
+  "coverageThreshold": {
+    "global": {
+      "statements": 90,
+      "branches": 90,
+      "functions": 90,
+      "lines": 90
+    }
+  },
+  "coverageReporters": ["json-summary", "text", "lcov"],
+  "moduleDirectories": ["node_modules", "app"],
+  "moduleNameMapper": {
+    "@app(.*)$": "<rootDir>/app/$1",
+    "^lodash-es(.*)": "lodash$1",
+    "@(containers|components|services|utils|themes)(.*)$": "<rootDir>/app/$1/$2",
+    ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/internals/mocks/cssModule.js",
+    ".*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/image.js"
+  },
+  "transformIgnorePatterns": ["/node_modules/(?!lodash-es/*)"],
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.js", "<rootDir>/internals/testing/test-bundler.js"],
+  "setupFiles": ["raf/polyfill"],
+  "testRegex": "tests/.*\\.test\\.[jt]sx?$",
+  "snapshotSerializers": []
+}
