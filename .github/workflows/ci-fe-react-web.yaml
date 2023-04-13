@@ -13,12 +13,12 @@ jobs:
   build_and_test:
     name: Build & Test
     runs-on: ubuntu-latest
-    defaults: 
+    defaults:
       run:
         working-directory: ./fe-react-web
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.14.x]
 
     steps:
       - uses: actions/checkout@v3
